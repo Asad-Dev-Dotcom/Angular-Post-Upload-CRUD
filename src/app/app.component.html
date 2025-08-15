@@ -1,0 +1,38 @@
+
+<div class="workbtns">
+  <button (click)="addpost()">Add Posts</button>
+  <button (click)="watchpost()">Watch Posts</button>
+</div>
+<div class="formdiv" *ngIf="formcontrol">
+  <h1>Post Management</h1>
+<form (submit)="onSubmit()" style="margin-bottom: 20px;" [ngClass]="!formvalid() ? 'validform' : ''">
+  <input type="file" (change)="onImageChange($event)"  #fileInput /><br />
+  <input type="text" [(ngModel)]="userForm.name" name="name" placeholder="Name" required /><br />
+  <input type="email" [(ngModel)]="userForm.email" name="email" placeholder="Email" required [readonly]="isEditing" [style.cursor]="isEditing ? 'not-allowed' : ''" /><br />
+  <textarea [(ngModel)]="userForm.description" name="description" placeholder="Description" required></textarea><br />
+  <button type="submit" [disabled]="!formvalid()" [style.cursor]="!formvalid() ? 'not-allowed' : ''" >{{ isEditing ? 'Update' : 'Add' }} User</button>
+</form>
+</div>
+
+
+<div class="post" *ngIf="postcontrol">
+<h1>Display Posts: <span style="color: rgb(149, 85, 209);">{{users.length}}</span></h1>
+
+<h1 style="color: red;" *ngIf="users.length<=0">No Post Found</h1>
+
+<div class="card-container">
+  <div class="card" *ngFor="let user of users">
+    <div class="card-header">
+      <span class="menu-icon" (click)="user.showActions = !user.showActions">⋮</span>
+      <div class="card-menu" *ngIf="user.showActions">
+        <button (click)="editUser(user)">Edit</button>
+        <button (click)="deleteUser(user.email)">Delete</button>
+      </div>
+    </div>
+    <img [src]="user.image" alt="User Image" class="card-img"/>
+    <h3>{{ user.name }}</h3>
+    <p>{{ user.email }}</p>
+    <p>{{ user.description }}</p>
+  </div>
+</div>
+</div>
